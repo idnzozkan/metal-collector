@@ -1,0 +1,37 @@
+{
+  "name": "metal-collector-web-app",
+  "version": "1.0.0",
+  "description": "Api project for metal collector XY robot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "watch": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/idnzozkan/metal-collector-web-app.git"
+  },
+  "keywords": [
+    "metal",
+    "collector",
+    "robot",
+    "arduino",
+    "robotics",
+    "serialport"
+  ],
+  "author": "Deniz Ozkan <ibrahimdenizozkan@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/idnzozkan/metal-collector-web-app/issues"
+  },
+  "homepage": "https://github.com/idnzozkan/metal-collector-web-app#readme",
+  "dependencies": {
+    "gcode-parser": "^1.3.7",
+    "johnny-five": "^2.1.0",
+    "serialport": "^9.2.8"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
