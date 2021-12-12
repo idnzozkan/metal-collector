@@ -1,0 +1,9 @@
+{
+  "port": "/dev/ttyUSB0",
+  "stepSize": "20",
+  "feedRate": "10000",
+  "xMax": "",
+  "xMin": "",
+  "yMax": "",
+  "yMin": ""
+}
