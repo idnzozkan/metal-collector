@@ -1,10 +1,5 @@
-const SerialPort = require('serialport')
-const port = new SerialPort('/dev/ttyUSB0', { baudRate: 115200 })
+import gerbilCnc from 'gerbil-cnc'
 
-port.write('$$', function (err) {
-  if (err) {
-    return console.log('Error on write: ', err.message)
-  }
+let gerbil = gerbilCnc('COM5')
 
-  console.log('message written')
-})
+gerbil.machineReady.then(() => gerbil.writeLine('$J=G21G91X20Y-20F10000')).then(console.log)
