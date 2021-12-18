@@ -8,14 +8,17 @@ const gerbil = gerbilCnc(port)
 
 export const position = { x: 0, y: 0 }
 
-export const moveLeft = async () => {
+export const moveLeft = async xToMove => {
   const machineReady = await gerbil.machineReady
 
-  if (machineReady) {
+  if (machineReady[0].connected) {
     try {
-      const response = await gerbil.writeLine(`$J=G21G91X-${stepSize}Y-${stepSize}F${feedRate}`)
+      const response = await gerbil.writeLine(
+        `G21G91G1X-${xToMove ? xToMove : stepSize}F${feedRate}`
+      )
 
-      position.x -= parseInt(stepSize)
+      position.x -= parseFloat(stepSize)
+      position.y += parseFloat(stepSize)
 
       console.log('Response: ', response + 'Machine moved left')
       return response
@@ -26,14 +29,17 @@ export const moveLeft = async () => {
   }
 }
 
-export const moveRight = async () => {
+export const moveRight = async xToMove => {
   const machineReady = await gerbil.machineReady
 
-  if (machineReady) {
+  if (machineReady[0].connected) {
     try {
-      const response = await gerbil.writeLine(`$J=G21G91X${stepSize}Y${stepSize}F${feedRate}`)
+      const response = await gerbil.writeLine(
+        `G21G91G1X${xToMove ? xToMove : stepSize}F${feedRate}`
+      )
 
-      position.x += parseInt(stepSize)
+      position.x += parseFloat(stepSize)
+      position.y -= parseFloat(stepSize)
 
       console.log('Response: ', response + 'Machine moved right')
       return response
@@ -44,14 +50,17 @@ export const moveRight = async () => {
   }
 }
 
-export const moveForward = async () => {
+export const moveForward = async yToMove => {
   const machineReady = await gerbil.machineReady
 
-  if (machineReady) {
+  if (machineReady[0].connected) {
     try {
-      const response = await gerbil.writeLine(`$J=G21G91X-${stepSize}Y${stepSize}F${feedRate}`)
+      const response = await gerbil.writeLine(
+        `G21G91G1Y${yToMove ? yToMove : stepSize}F${feedRate}`
+      )
 
-      position.y += parseInt(stepSize)
+      position.x += parseFloat(stepSize)
+      position.y += parseFloat(stepSize)
 
       console.log('Response: ', response + 'Machine moved forward')
       return response
@@ -62,14 +71,17 @@ export const moveForward = async () => {
   }
 }
 
-export const moveBackward = async () => {
+export const moveBackward = async yToMove => {
   const machineReady = await gerbil.machineReady
 
-  if (machineReady) {
+  if (machineReady[0].connected) {
     try {
-      const response = await gerbil.writeLine(`$J=G21G91X${stepSize}Y-${stepSize}F${feedRate}`)
+      const response = await gerbil.writeLine(
+        `G21G91G1Y-${yToMove ? yToMove : stepSize}F${feedRate}`
+      )
 
-      position.y -= parseInt(stepSize)
+      position.x -= parseFloat(stepSize)
+      position.y -= parseFloat(stepSize)
 
       console.log('Response: ', response + 'Machine moved backward')
       return response
@@ -80,15 +92,16 @@ export const moveBackward = async () => {
   }
 }
 
-export const moveLeftForward = async () => {
+export const moveLeftForward = async (xToMove, yToMove) => {
   const machineReady = await gerbil.machineReady
 
-  if (machineReady) {
+  if (machineReady[0].connected) {
     try {
-      const response = await gerbil.writeLine(`$J=G21G91X-${stepSize}F${feedRate}`)
+      const response = await gerbil.writeLine(
+        `G21G91G1X-${xToMove ? xToMove : stepSize}Y${yToMove ? yToMove : stepSize}F${feedRate}`
+      )
 
-      position.x -= parseInt(stepSize)
-      position.y += parseInt(stepSize)
+      position.y += parseFloat(stepSize)
 
       console.log('Response: ', response + 'Machine moved left-forward')
       return response
@@ -99,15 +112,16 @@ export const moveLeftForward = async () => {
   }
 }
 
-export const moveRightForward = async () => {
+export const moveRightForward = async (xToMove, yToMove) => {
   const machineReady = await gerbil.machineReady
 
-  if (machineReady) {
+  if (machineReady[0].connected) {
     try {
-      const response = await gerbil.writeLine(`$J=G21G91Y${stepSize}F${feedRate}`)
+      const response = await gerbil.writeLine(
+        `G21G91G1X${xToMove ? xToMove : stepSize}Y${yToMove ? yToMove : stepSize}F${feedRate}`
+      )
 
-      position.x += parseInt(stepSize)
-      position.y += parseInt(stepSize)
+      position.x += parseFloat(stepSize)
 
       console.log('Response: ', response + 'Machine moved right-forward')
       return response
@@ -118,15 +132,15 @@ export const moveRightForward = async () => {
   }
 }
 
-export const moveLeftBackward = async () => {
+export const moveLeftBackward = async (xToMove, yToMove) => {
   const machineReady = await gerbil.machineReady
 
-  if (machineReady) {
+  if (machineReady[0].connected) {
     try {
-      const response = await gerbil.writeLine(`$J=G21G91Y-${stepSize}F${feedRate}`)
-
-      position.x -= parseInt(stepSize)
-      position.y -= parseInt(stepSize)
+      const response = await gerbil.writeLine(
+        `G21G91G1X-${xToMove ? xToMove : stepSize}Y-${yToMove ? yToMove : stepSize}F${feedRate}`
+      )
+      position.x -= parseFloat(stepSize)
 
       console.log('Response: ', response + 'Machine moved left-backward')
       return response
@@ -137,15 +151,16 @@ export const moveLeftBackward = async () => {
   }
 }
 
-export const moveRightBackward = async () => {
+export const moveRightBackward = async (xToMove, yToMove) => {
   const machineReady = await gerbil.machineReady
 
-  if (machineReady) {
+  if (machineReady[0].connected) {
     try {
-      const response = await gerbil.writeLine(`$J=G21G91X${stepSize}F${feedRate}`)
+      const response = await gerbil.writeLine(
+        `G21G91G1X${xToMove ? xToMove : stepSize}Y-${yToMove ? yToMove : stepSize}F${feedRate}`
+      )
 
-      position.x += parseInt(stepSize)
-      position.y -= parseInt(stepSize)
+      position.y -= parseFloat(stepSize)
 
       console.log('Response: ', response + 'Machine moved right-backward')
       return response
@@ -153,5 +168,41 @@ export const moveRightBackward = async () => {
       console.log(err)
       return err.message
     }
+  }
+}
+
+export const moveTo = async target => {
+  const xToMove = target.x ? parseFloat(target.x) - position.x : position.x
+  const yToMove = target.y ? parseFloat(target.y) - position.y : position.y
+
+  console.log('xToMove', xToMove)
+  console.log('yToMove', yToMove)
+
+  if (xToMove !== 0 && yToMove !== 0) {
+    if (xToMove < 0 && yToMove > 0) {
+      await moveLeftForward(xToMove, yToMove)
+    } else if (xToMove > 0 && yToMove > 0) {
+      await moveRightForward(xToMove, yToMove)
+    } else if (xToMove < 0 && yToMove < 0) {
+      await moveLeftBackward(xToMove, yToMove)
+    } else {
+      await moveRightBackward(xToMove, yToMove)
+    }
+  } else if (xToMove !== 0 && yToMove === 0) {
+    if (xToMove < 0) {
+      await moveLeft(xToMove)
+    } else {
+      await moveRight(xToMove)
+    }
+  } else if (xToMove === 0 && yToMove !== 0) {
+    if (yToMove > 0) {
+      await moveForward(yToMove)
+    } else {
+      await moveBackward(yToMove)
+    }
+  } else {
+    // Don't move
+    console.log("Don't move")
+    return
   }
 }
