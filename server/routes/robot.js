@@ -8,7 +8,8 @@ import {
   moveLeftForward,
   moveRightForward,
   moveLeftBackward,
-  moveRightBackward
+  moveRightBackward,
+  moveTo
 } from '../gcode-utils.js'
 
 const router = express.Router()
@@ -95,6 +96,16 @@ router.get('/move/left-backward', async (req, res) => {
 router.get('/move/right-backward', async (req, res) => {
   try {
     const robotRes = await moveRightBackward()
+    res.status(200).json(robotRes)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err.message)
+  }
+})
+
+router.post('/move/position', async (req, res) => {
+  try {
+    const robotRes = await moveTo(req.body)
     res.status(200).json(robotRes)
   } catch (err) {
     console.log(err)
