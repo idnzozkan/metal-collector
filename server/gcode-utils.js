@@ -17,8 +17,7 @@ export const moveLeft = async xToMove => {
         `G21G91G1X-${xToMove ? xToMove : stepSize}F${feedRate}`
       )
 
-      position.x -= parseFloat(stepSize)
-      position.y += parseFloat(stepSize)
+      position.x -= parseFloat(xToMove ? xToMove : stepSize)
 
       console.log('Response: ', response + 'Machine moved left')
       return response
@@ -38,8 +37,7 @@ export const moveRight = async xToMove => {
         `G21G91G1X${xToMove ? xToMove : stepSize}F${feedRate}`
       )
 
-      position.x += parseFloat(stepSize)
-      position.y -= parseFloat(stepSize)
+      position.x += parseFloat(xToMove ? xToMove : stepSize)
 
       console.log('Response: ', response + 'Machine moved right')
       return response
@@ -59,8 +57,7 @@ export const moveForward = async yToMove => {
         `G21G91G1Y${yToMove ? yToMove : stepSize}F${feedRate}`
       )
 
-      position.x += parseFloat(stepSize)
-      position.y += parseFloat(stepSize)
+      position.y += parseFloat(yToMove ? yToMove : stepSize)
 
       console.log('Response: ', response + 'Machine moved forward')
       return response
@@ -80,8 +77,7 @@ export const moveBackward = async yToMove => {
         `G21G91G1Y-${yToMove ? yToMove : stepSize}F${feedRate}`
       )
 
-      position.x -= parseFloat(stepSize)
-      position.y -= parseFloat(stepSize)
+      position.y -= parseFloat(yToMove ? yToMove : stepSize)
 
       console.log('Response: ', response + 'Machine moved backward')
       return response
@@ -101,7 +97,8 @@ export const moveLeftForward = async (xToMove, yToMove) => {
         `G21G91G1X-${xToMove ? xToMove : stepSize}Y${yToMove ? yToMove : stepSize}F${feedRate}`
       )
 
-      position.y += parseFloat(stepSize)
+      position.x -= parseFloat(xToMove ? xToMove : stepSize)
+      position.y += parseFloat(yToMove ? yToMove : stepSize)
 
       console.log('Response: ', response + 'Machine moved left-forward')
       return response
@@ -121,7 +118,8 @@ export const moveRightForward = async (xToMove, yToMove) => {
         `G21G91G1X${xToMove ? xToMove : stepSize}Y${yToMove ? yToMove : stepSize}F${feedRate}`
       )
 
-      position.x += parseFloat(stepSize)
+      position.x += parseFloat(xToMove ? xToMove : stepSize)
+      position.y += parseFloat(yToMove ? yToMove : stepSize)
 
       console.log('Response: ', response + 'Machine moved right-forward')
       return response
@@ -140,7 +138,9 @@ export const moveLeftBackward = async (xToMove, yToMove) => {
       const response = await gerbil.writeLine(
         `G21G91G1X-${xToMove ? xToMove : stepSize}Y-${yToMove ? yToMove : stepSize}F${feedRate}`
       )
-      position.x -= parseFloat(stepSize)
+
+      position.x -= parseFloat(xToMove ? xToMove : stepSize)
+      position.y -= parseFloat(yToMove ? yToMove : stepSize)
 
       console.log('Response: ', response + 'Machine moved left-backward')
       return response
@@ -160,7 +160,8 @@ export const moveRightBackward = async (xToMove, yToMove) => {
         `G21G91G1X${xToMove ? xToMove : stepSize}Y-${yToMove ? yToMove : stepSize}F${feedRate}`
       )
 
-      position.y -= parseFloat(stepSize)
+      position.x += parseFloat(xToMove ? xToMove : stepSize)
+      position.y -= parseFloat(yToMove ? yToMove : stepSize)
 
       console.log('Response: ', response + 'Machine moved right-backward')
       return response
@@ -172,37 +173,41 @@ export const moveRightBackward = async (xToMove, yToMove) => {
 }
 
 export const moveTo = async target => {
-  const xToMove = target.x ? parseFloat(target.x) - position.x : position.x
-  const yToMove = target.y ? parseFloat(target.y) - position.y : position.y
+  let { x, y } = target
+  x = parseFloat(x) - position.x
+  y = parseFloat(y) - position.y
 
-  console.log('xToMove', xToMove)
-  console.log('yToMove', yToMove)
+  console.log('x: ', x + ' y: ', y)
 
-  if (xToMove !== 0 && yToMove !== 0) {
-    if (xToMove < 0 && yToMove > 0) {
-      await moveLeftForward(xToMove, yToMove)
-    } else if (xToMove > 0 && yToMove > 0) {
-      await moveRightForward(xToMove, yToMove)
-    } else if (xToMove < 0 && yToMove < 0) {
-      await moveLeftBackward(xToMove, yToMove)
+  if (x && !y) {
+    if (x < 0) {
+      moveLeft(Math.abs(x))
     } else {
-      await moveRightBackward(xToMove, yToMove)
+      moveRight(x)
     }
-  } else if (xToMove !== 0 && yToMove === 0) {
-    if (xToMove < 0) {
-      await moveLeft(xToMove)
+  }
+
+  if (!x && y) {
+    if (y < 0) {
+      moveBackward(Math.abs(y))
     } else {
-      await moveRight(xToMove)
+      moveForward(y)
     }
-  } else if (xToMove === 0 && yToMove !== 0) {
-    if (yToMove > 0) {
-      await moveForward(yToMove)
-    } else {
-      await moveBackward(yToMove)
+  }
+
+  if (x && y) {
+    if (x < 0 && y > 0) {
+      moveLeftForward(Math.abs(x), y)
+    } else if (x < 0 && y < 0) {
+      moveLeftBackward(Math.abs(x), Math.abs(y))
+    } else if (x > 0 && y > 0) {
+      moveRightForward(x, y)
+    } else if (x > 0 && y < 0) {
+      moveRightBackward(x, Math.abs(y))
     }
-  } else {
-    // Don't move
-    console.log("Don't move")
-    return
+  }
+
+  if (!x && !y) {
+    return console.log("Don't move")
   }
 }
