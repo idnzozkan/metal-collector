@@ -1,0 +1,10 @@
+[
+  {
+    "position": { "x": 50, "y": -90 },
+    "isCollected": false
+  },
+  {
+    "position": { "x": 200, "y": -50 },
+    "isCollected": false
+  }
+]
