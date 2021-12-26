@@ -39,3 +39,22 @@ html {
 .position p {
   font-size: 1.25rem;
 }
+
+.specific-position-entering-area {
+  display: flex;
+  width: 33%;
+}
+
+.specific-position-entering-area input {
+  flex: 3;
+  padding: 0.5rem;
+  margin-right: 1rem;
+}
+
+.specific-position-entering-area button {
+  flex: 1;
+  padding: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 3px;
+}

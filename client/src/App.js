@@ -6,6 +6,18 @@ const App = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [target, setTarget] = useState({ x: null, y: null })
   const [isSent, setIsSent] = useState(false)
+  const [metalPositions, setMetalPositions] = useState(null)
+
+  const handleScan = async () => {
+    try {
+      const detectedMetalPositions = await axios.get(`http://localhost:8080/robot/scan`)
+      setMetalPositions(detectedMetalPositions)
+    } catch (error) {
+      console.log(error.response?.data || error)
+    }
+  }
+
+  console.log(metalPositions)
 
   const handleInput = e => {
     if (e.target.name === 'x-value') setTarget(prev => ({ ...prev, x: e.target.value }))
@@ -16,7 +28,7 @@ const App = () => {
     try {
       await axios.post(`http://localhost:8080/robot/move/position`, target)
     } catch (error) {
-      console.log(error)
+      console.log(error.response?.data || error)
     }
   }
 
@@ -24,7 +36,7 @@ const App = () => {
     try {
       await axios.get(`http://localhost:8080/robot/move/${direction}`)
     } catch (error) {
-      console.log(error)
+      console.log(error.response?.data || error)
     }
   }
 
@@ -54,6 +66,7 @@ const App = () => {
           <button onClick={() => handleMove('right-forward')}>RIGHT-FORWARD</button>
           <button onClick={() => handleMove('left-backward')}>LEFT-BACKWARD</button>
           <button onClick={() => handleMove('right-backward')}>RIGHT-BACKWARD</button>
+          <button onClick={handleScan}>SCAN</button>
         </div>
         <div className="specific-position-entering-area">
           <input
