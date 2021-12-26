@@ -9,7 +9,8 @@ import {
   moveRightForward,
   moveLeftBackward,
   moveRightBackward,
-  moveTo
+  moveTo,
+  scan
 } from '../gcode-utils.js'
 
 const router = express.Router()
@@ -17,6 +18,16 @@ const router = express.Router()
 router.get('/position', (req, res) => {
   try {
     res.status(200).json(position)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err.message)
+  }
+})
+
+router.get('/scan', async (req, res) => {
+  try {
+    const robotRes = await scan()
+    res.status(200).json(robotRes)
   } catch (err) {
     console.log(err)
     res.status(500).json(err.message)
