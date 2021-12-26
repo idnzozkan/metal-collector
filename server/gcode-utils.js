@@ -2,7 +2,7 @@ import gerbilCnc from 'gerbil-cnc'
 import fs from 'fs'
 
 const config = fs.readFileSync('./config.json')
-const { port, stepSize, feedRate } = JSON.parse(config)
+const { port, stepSize, feedRate, xMax, xMin, yMax, yMin } = JSON.parse(config)
 
 const gerbil = gerbilCnc(port)
 
@@ -10,14 +10,16 @@ export const position = { x: 0, y: 0 }
 
 export const moveLeft = async xToMove => {
   const machineReady = await gerbil.machineReady
+  const amountX = xToMove || stepSize
 
   if (machineReady[0].connected) {
-    try {
-      const response = await gerbil.writeLine(
-        `G21G91G1X-${xToMove ? xToMove : stepSize}F${feedRate}`
-      )
+    if (position.x - parseFloat(amountX) < xMin)
+      throw new Error('You cannot exceed the limits of the workspace!')
 
-      position.x -= parseFloat(xToMove ? xToMove : stepSize)
+    try {
+      const response = await gerbil.writeLine(`G21G91G1X-${amountX}F${feedRate}`)
+
+      position.x -= parseFloat(amountX)
 
       console.log('Response: ', response + 'Machine moved left')
       return response
@@ -30,14 +32,16 @@ export const moveLeft = async xToMove => {
 
 export const moveRight = async xToMove => {
   const machineReady = await gerbil.machineReady
+  const amountX = xToMove || stepSize
 
   if (machineReady[0].connected) {
-    try {
-      const response = await gerbil.writeLine(
-        `G21G91G1X${xToMove ? xToMove : stepSize}F${feedRate}`
-      )
+    if (position.x + parseFloat(amountX) > xMax)
+      throw new Error('You cannot exceed the limits of the workspace!')
 
-      position.x += parseFloat(xToMove ? xToMove : stepSize)
+    try {
+      const response = await gerbil.writeLine(`G21G91G1X${amountX}F${feedRate}`)
+
+      position.x += parseFloat(amountX)
 
       console.log('Response: ', response + 'Machine moved right')
       return response
@@ -50,14 +54,16 @@ export const moveRight = async xToMove => {
 
 export const moveForward = async yToMove => {
   const machineReady = await gerbil.machineReady
+  const amountY = yToMove || stepSize
 
   if (machineReady[0].connected) {
-    try {
-      const response = await gerbil.writeLine(
-        `G21G91G1Y${yToMove ? yToMove : stepSize}F${feedRate}`
-      )
+    if (position.y + parseFloat(amountY) > yMax)
+      throw new Error('You cannot exceed the limits of the workspace!')
 
-      position.y += parseFloat(yToMove ? yToMove : stepSize)
+    try {
+      const response = await gerbil.writeLine(`G21G91G1Y${amountY}F${feedRate}`)
+
+      position.y += parseFloat(amountY)
 
       console.log('Response: ', response + 'Machine moved forward')
       return response
@@ -70,14 +76,16 @@ export const moveForward = async yToMove => {
 
 export const moveBackward = async yToMove => {
   const machineReady = await gerbil.machineReady
+  const amountY = yToMove || stepSize
 
   if (machineReady[0].connected) {
-    try {
-      const response = await gerbil.writeLine(
-        `G21G91G1Y-${yToMove ? yToMove : stepSize}F${feedRate}`
-      )
+    if (position.y - parseFloat(amountY) < yMin)
+      throw new Error('You cannot exceed the limits of the workspace!')
 
-      position.y -= parseFloat(yToMove ? yToMove : stepSize)
+    try {
+      const response = await gerbil.writeLine(`G21G91G1Y-${amountY}F${feedRate}`)
+
+      position.y -= parseFloat(amountY)
 
       console.log('Response: ', response + 'Machine moved backward')
       return response
@@ -90,15 +98,18 @@ export const moveBackward = async yToMove => {
 
 export const moveLeftForward = async (xToMove, yToMove) => {
   const machineReady = await gerbil.machineReady
+  const amountX = xToMove || stepSize
+  const amountY = yToMove || stepSize
 
   if (machineReady[0].connected) {
-    try {
-      const response = await gerbil.writeLine(
-        `G21G91G1X-${xToMove ? xToMove : stepSize}Y${yToMove ? yToMove : stepSize}F${feedRate}`
-      )
+    if (position.x - parseFloat(amountX) < xMin || position.y + parseFloat(amountY) > yMax)
+      throw new Error('You cannot exceed the limits of the workspace!')
 
-      position.x -= parseFloat(xToMove ? xToMove : stepSize)
-      position.y += parseFloat(yToMove ? yToMove : stepSize)
+    try {
+      const response = await gerbil.writeLine(`G21G91G1X-${amountX}Y${amountY}F${feedRate}`)
+
+      position.x -= parseFloat(amountX)
+      position.y += parseFloat(amountY)
 
       console.log('Response: ', response + 'Machine moved left-forward')
       return response
@@ -111,15 +122,18 @@ export const moveLeftForward = async (xToMove, yToMove) => {
 
 export const moveRightForward = async (xToMove, yToMove) => {
   const machineReady = await gerbil.machineReady
+  const amountX = xToMove || stepSize
+  const amountY = yToMove || stepSize
 
   if (machineReady[0].connected) {
-    try {
-      const response = await gerbil.writeLine(
-        `G21G91G1X${xToMove ? xToMove : stepSize}Y${yToMove ? yToMove : stepSize}F${feedRate}`
-      )
+    if (position.x + parseFloat(amountX) > xMax || position.y + parseFloat(amountY) > yMax)
+      throw new Error('You cannot exceed the limits of the workspace!')
 
-      position.x += parseFloat(xToMove ? xToMove : stepSize)
-      position.y += parseFloat(yToMove ? yToMove : stepSize)
+    try {
+      const response = await gerbil.writeLine(`G21G91G1X${amountX}Y${amountY}F${feedRate}`)
+
+      position.x += parseFloat(amountX)
+      position.y += parseFloat(amountY)
 
       console.log('Response: ', response + 'Machine moved right-forward')
       return response
@@ -132,15 +146,18 @@ export const moveRightForward = async (xToMove, yToMove) => {
 
 export const moveLeftBackward = async (xToMove, yToMove) => {
   const machineReady = await gerbil.machineReady
+  const amountX = xToMove || stepSize
+  const amountY = yToMove || stepSize
 
   if (machineReady[0].connected) {
-    try {
-      const response = await gerbil.writeLine(
-        `G21G91G1X-${xToMove ? xToMove : stepSize}Y-${yToMove ? yToMove : stepSize}F${feedRate}`
-      )
+    if (position.x - parseFloat(amountX) < xMin || position.y - parseFloat(amountY) < yMin)
+      throw new Error('You cannot exceed the limits of the workspace!')
 
-      position.x -= parseFloat(xToMove ? xToMove : stepSize)
-      position.y -= parseFloat(yToMove ? yToMove : stepSize)
+    try {
+      const response = await gerbil.writeLine(`G21G91G1X-${amountX}Y-${amountY}F${feedRate}`)
+
+      position.x -= parseFloat(amountX)
+      position.y -= parseFloat(amountY)
 
       console.log('Response: ', response + 'Machine moved left-backward')
       return response
@@ -153,15 +170,18 @@ export const moveLeftBackward = async (xToMove, yToMove) => {
 
 export const moveRightBackward = async (xToMove, yToMove) => {
   const machineReady = await gerbil.machineReady
+  const amountX = xToMove || stepSize
+  const amountY = yToMove || stepSize
 
   if (machineReady[0].connected) {
-    try {
-      const response = await gerbil.writeLine(
-        `G21G91G1X${xToMove ? xToMove : stepSize}Y-${yToMove ? yToMove : stepSize}F${feedRate}`
-      )
+    if (position.x + parseFloat(amountX) > xMax || position.y - parseFloat(amountY) < yMin)
+      throw new Error('You cannot exceed the limits of the workspace!')
 
-      position.x += parseFloat(xToMove ? xToMove : stepSize)
-      position.y -= parseFloat(yToMove ? yToMove : stepSize)
+    try {
+      const response = await gerbil.writeLine(`G21G91G1X${amountX}Y-${amountY}F${feedRate}`)
+
+      position.x += parseFloat(amountX)
+      position.y -= parseFloat(amountY)
 
       console.log('Response: ', response + 'Machine moved right-backward')
       return response
@@ -177,37 +197,59 @@ export const moveTo = async target => {
   x = parseFloat(x) - position.x
   y = parseFloat(y) - position.y
 
-  console.log('x: ', x + ' y: ', y)
-
   if (x && !y) {
     if (x < 0) {
-      moveLeft(Math.abs(x))
+      await moveLeft(Math.abs(x))
     } else {
-      moveRight(x)
+      await moveRight(x)
     }
   }
 
   if (!x && y) {
     if (y < 0) {
-      moveBackward(Math.abs(y))
+      await moveBackward(Math.abs(y))
     } else {
-      moveForward(y)
+      await moveForward(y)
     }
   }
 
   if (x && y) {
     if (x < 0 && y > 0) {
-      moveLeftForward(Math.abs(x), y)
+      await moveLeftForward(Math.abs(x), y)
     } else if (x < 0 && y < 0) {
-      moveLeftBackward(Math.abs(x), Math.abs(y))
+      await moveLeftBackward(Math.abs(x), Math.abs(y))
     } else if (x > 0 && y > 0) {
-      moveRightForward(x, y)
+      await moveRightForward(x, y)
     } else if (x > 0 && y < 0) {
-      moveRightBackward(x, Math.abs(y))
+      await moveRightBackward(x, Math.abs(y))
     }
   }
 
   if (!x && !y) {
     return console.log("Don't move")
   }
+}
+
+export const scan = async () => {
+  const dummyMetalsData = fs.readFileSync('./dummy-metals.json')
+  const dummyMetals = JSON.parse(dummyMetalsData)
+  const dummyMetalPositions = dummyMetals.map(item => item.position)
+  const detectedMetalPositions = []
+
+  for (let x = parseFloat(xMin); x <= parseFloat(xMax); x += 50) {
+    for (let y = parseFloat(yMax); y >= parseFloat(yMin); y -= 1) {
+      // if the inductive sensor detects a metal at the current position
+      // then save the current position
+
+      const foundMetalPosition = dummyMetalPositions.find(
+        position => position.x == x && position.y == y
+      )
+
+      if (foundMetalPosition) detectedMetalPositions.push(foundMetalPosition)
+
+      await moveTo({ x, y })
+    }
+  }
+
+  return detectedMetalPositions
 }
