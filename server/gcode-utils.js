@@ -1,5 +1,6 @@
 import gerbilCnc from 'gerbil-cnc'
 import fs from 'fs'
+import { io } from './index.js'
 
 const config = fs.readFileSync('./config.json')
 const { port, stepSize, feedRate, xMax, xMin, yMax, yMin } = JSON.parse(config)
@@ -20,6 +21,8 @@ export const moveLeft = async xToMove => {
       const response = await gerbil.writeLine(`G21G91G1X-${amountX}F${feedRate}`)
 
       position.x -= parseFloat(amountX)
+      io.emit('update-robot-position', position)
+      console.log(position)
 
       console.log('Response: ', response + 'Machine moved left')
       return response
@@ -42,6 +45,8 @@ export const moveRight = async xToMove => {
       const response = await gerbil.writeLine(`G21G91G1X${amountX}F${feedRate}`)
 
       position.x += parseFloat(amountX)
+      io.emit('update-robot-position', position)
+      console.log(position)
 
       console.log('Response: ', response + 'Machine moved right')
       return response
@@ -64,6 +69,8 @@ export const moveForward = async yToMove => {
       const response = await gerbil.writeLine(`G21G91G1Y${amountY}F${feedRate}`)
 
       position.y += parseFloat(amountY)
+      io.emit('update-robot-position', position)
+      console.log(position)
 
       console.log('Response: ', response + 'Machine moved forward')
       return response
@@ -86,6 +93,8 @@ export const moveBackward = async yToMove => {
       const response = await gerbil.writeLine(`G21G91G1Y-${amountY}F${feedRate}`)
 
       position.y -= parseFloat(amountY)
+      io.emit('update-robot-position', position)
+      console.log(position)
 
       console.log('Response: ', response + 'Machine moved backward')
       return response
@@ -110,6 +119,8 @@ export const moveLeftForward = async (xToMove, yToMove) => {
 
       position.x -= parseFloat(amountX)
       position.y += parseFloat(amountY)
+      io.emit('update-robot-position', position)
+      console.log(position)
 
       console.log('Response: ', response + 'Machine moved left-forward')
       return response
@@ -134,6 +145,8 @@ export const moveRightForward = async (xToMove, yToMove) => {
 
       position.x += parseFloat(amountX)
       position.y += parseFloat(amountY)
+      io.emit('update-robot-position', position)
+      console.log(position)
 
       console.log('Response: ', response + 'Machine moved right-forward')
       return response
@@ -158,6 +171,8 @@ export const moveLeftBackward = async (xToMove, yToMove) => {
 
       position.x -= parseFloat(amountX)
       position.y -= parseFloat(amountY)
+      io.emit('update-robot-position', position)
+      console.log(position)
 
       console.log('Response: ', response + 'Machine moved left-backward')
       return response
@@ -182,6 +197,8 @@ export const moveRightBackward = async (xToMove, yToMove) => {
 
       position.x += parseFloat(amountX)
       position.y -= parseFloat(amountY)
+      io.emit('update-robot-position', position)
+      console.log(position)
 
       console.log('Response: ', response + 'Machine moved right-backward')
       return response
