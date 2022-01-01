@@ -1,4 +1,4 @@
-import axios from './axios.config'
+import axios from './axios.config.js'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
