@@ -1,10 +1,14 @@
 [
   {
-    "position": { "x": 50, "y": -90 },
+    "id": 1,
+    "position": { "x": 50, "y": -165 },
+    "isSelected": false,
     "isCollected": false
   },
   {
-    "position": { "x": 200, "y": -50 },
+    "id": 2,
+    "position": { "x": 150, "y": -85 },
+    "isSelected": false,
     "isCollected": false
   }
 ]
