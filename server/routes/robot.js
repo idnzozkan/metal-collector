@@ -24,6 +24,19 @@ router.get('/position', (req, res) => {
   }
 })
 
+router.post('/position', (req, res) => {
+  const { x, y } = req.body
+  try {
+    position.x = x
+    position.y = y
+
+    res.status(200).json(position)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err.message)
+  }
+})
+
 router.get('/scan', async (req, res) => {
   try {
     const robotRes = await scan()
