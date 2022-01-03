@@ -24,7 +24,7 @@ const App = () => {
 }
 
 const Container = styled.div`
-  padding: 7rem 15rem;
+  padding: 9rem 15rem 7rem 15rem;
 `
 
 const MainPanel = styled.div`
