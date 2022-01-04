@@ -10,31 +10,19 @@ import {
   moveLeftBackward,
   moveRightBackward,
   moveTo,
-  scan
+  scan,
+  setPosition
 } from '../gcode-utils.js'
 
 const router = express.Router()
 
 router.get('/position', (req, res) => {
-  try {
-    res.status(200).json(position)
-  } catch (err) {
-    console.log(err)
-    res.status(500).json(err.message)
-  }
+  res.status(200).json(position)
 })
 
 router.post('/position', (req, res) => {
-  const { x, y } = req.body
-  try {
-    position.x = x
-    position.y = y
-
-    res.status(200).json(position)
-  } catch (err) {
-    console.log(err)
-    res.status(500).json(err.message)
-  }
+  setPosition(req.body)
+  res.status(200).json(position)
 })
 
 router.get('/scan', async (req, res) => {
