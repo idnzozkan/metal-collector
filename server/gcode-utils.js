@@ -9,6 +9,11 @@ const gerbil = gerbilCnc(port)
 
 export const position = { x: 0, y: 0 }
 
+export const setPosition = ({ x, y }) => {
+  position.x = x
+  position.y = y
+}
+
 export const moveLeft = async xToMove => {
   const machineReady = await gerbil.machineReady
   const amountX = xToMove || stepSize
