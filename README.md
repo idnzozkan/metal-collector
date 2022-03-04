@@ -109,19 +109,19 @@ This is important in order to prevent the robot from physically moving out of th
 
 #### Server
 
-1 -- Open your terminal and navigate to the `server` folder
+1 - Open your terminal and navigate to the `server` folder
 
 ```bash
 $ cd server
 ```
 
-2 -- Install dependencies via npm
+2 - Install dependencies via npm
 
 ```bash
 $ npm install
 ```
 
-3 -- Run the server by using the following command
+3 - Run the server by using the following command
 
 ```bash
 $ npm start
@@ -129,19 +129,19 @@ $ npm start
 
 #### Client
 
-1 -- Open your terminal and navigate to the `client` folder
+1 - Open your terminal and navigate to the `client` folder
 
 ```bash
 $ cd client
 ```
 
-2 -- Install dependencies via npm
+2 - Install dependencies via npm
 
 ```bash
 $ npm install
 ```
 
-3 -- Run the client by using the following command
+3 - Run the client by using the following command
 
 ```bash
 $ npm start
