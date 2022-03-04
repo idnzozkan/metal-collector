@@ -109,19 +109,19 @@ This is important in order to prevent the robot from physically moving out of th
 
 #### Server
 
-1 -- Open your terminal and navigate to the `server` folder
+1 - Open your terminal and navigate to the `server` folder
 
 ```bash
 $ cd server
 ```
 
-2 -- Install dependencies via npm
+2 - Install dependencies via npm
 
 ```bash
 $ npm install
 ```
 
-3 -- Run the server by using the following command
+3 - Run the server by using the following command
 
 ```bash
 $ npm start
@@ -129,19 +129,19 @@ $ npm start
 
 #### Client
 
-1 -- Open your terminal and navigate to the `client` folder
+1 - Open your terminal and navigate to the `client` folder
 
 ```bash
 $ cd client
 ```
 
-2 -- Install dependencies via npm
+2 - Install dependencies via npm
 
 ```bash
 $ npm install
 ```
 
-3 -- Run the client by using the following command
+3 - Run the client by using the following command
 
 ```bash
 $ npm start
@@ -184,13 +184,17 @@ By clicking the Start Scanning button, you can let the robot move all over the w
 Normally, the algorithm that will run in the background of this process is:
 
 1 - While the robot moving, get information on whether the objects are metal or not by using an inductive sensor.
+
 2 - If a metal has been found at the current position, push the current location to the detectedMetals array.
+
 3 - End the scanning process if the robot's position is at the end of the workspace.
 
 However, since I did not use an inductive sensor, the algorithm working here is as follows:
 
 1 - Try to find a metal from the [dummy-metals.json](https://github.com/idnzozkan/metal-collector/blob/main/server/src/fake-data/dummy-metals.json) file by comparing the current position of the robot and the positions of the metals in the [dummy-metals.json](https://github.com/idnzozkan/metal-collector/blob/main/server/src/fake-data/dummy-metals.json) file. If the current position and the metal position are equal, assign the corresponding metal to the foundMetal variable.
+
 2 - If exists, push the foundMetal variable to the detectedMetals array.
+
 3 - End the scanning process if the robot's position is at the end of the workspace.
 
 After the scanning process is completed, you will see how many metals have been detected on the screen. Detected metals will also appear as green circles at their positions on the workspace.
