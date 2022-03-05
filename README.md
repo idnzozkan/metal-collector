@@ -107,6 +107,14 @@ This is important in order to prevent the robot from physically moving out of th
 
 ### Installing the dependencies and running the application
 
+Before cloning this repo, it is worth mentioning that if you clone this repo from the `main` branch, you will download the relatively large image files in the README.md. So, you can use the `development` branch to download source code without README.md and images.
+
+To clone from the `development` branch:
+
+```bash
+$ git clone -b development --single-branch git@github.com:idnzozkan/metal-collector.git
+```
+
 #### Server
 
 1 - Open your terminal and navigate to the `server` folder
